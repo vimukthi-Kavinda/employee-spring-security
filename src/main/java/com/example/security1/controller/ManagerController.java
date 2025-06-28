@@ -56,6 +56,9 @@ public class ManagerController {
 	}
 	
 	
+	//config ur own filter chains.. inspead of spring security giving
+	
+	
 	
 	
 }
