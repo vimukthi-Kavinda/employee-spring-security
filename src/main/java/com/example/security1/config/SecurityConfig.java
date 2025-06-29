@@ -43,6 +43,7 @@ public class SecurityConfig {
 						 
 	}
 	
+	@Bean
 	public UserDetailsService userDetailsService() {
 		
 		UserDetails usr1 = User.withDefaultPasswordEncoder()//plain  txt password access -> but should encode this
@@ -58,6 +59,7 @@ public class SecurityConfig {
 		//since we are using these.. no prop file configs valid
 		return new InMemoryUserDetailsManager(List.of(usr1,usr2));
 	}
+	
 	
 	
 
