@@ -14,6 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
@@ -23,7 +24,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserDetailsService userDetailsService;//created a custom UserDetailsService to inject
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -55,7 +56,7 @@ public class SecurityConfig {
 	public AuthenticationProvider authenticationProvider() { // config default auth provider
 		
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(); // work with db
-		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());//not using any pwd encoder
+		provider.setPasswordEncoder(new BCryptPasswordEncoder(12));//use a bcrypt ped encoder to decryt.. also give configed(on saving) strength value too (better maintain in property file to acces)
 		provider.setUserDetailsService(userDetailsService);//UserDetailsService responsible for verifiyng un pwds -> not our inmemo config bean -> create a custom UserDetailsService class to access db and validate
 		return provider;
 		
