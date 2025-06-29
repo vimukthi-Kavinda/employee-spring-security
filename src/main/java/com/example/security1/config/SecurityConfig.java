@@ -40,8 +40,9 @@ public class SecurityConfig {
 		
 		
 		
+
 		return http.csrf(csrf->csrf.disable())//csrf disable (CSRF protection is only necessary if you're using session cookies..)   -> each line a filter in filter service?
-				.authorizeHttpRequests(req->req.anyRequest())// auth all incoming request... No public endpoints unless you explicitly allow them.
+				.authorizeHttpRequests(req->req.anyRequest().authenticated())// auth all incoming request... No public endpoints unless you explicitly allow them.
 				.httpBasic(Customizer.withDefaults()) // for postman like requests basic auth.. In production, you typically replace this with token-based auth
 				.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//// Do not create or use HTTP sessions  — each request must be fully authenticated (stateless)
 				//Each request must include full authentication (e.g., via Authorization header).
