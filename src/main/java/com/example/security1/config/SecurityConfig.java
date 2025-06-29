@@ -65,7 +65,9 @@ public class SecurityConfig {
 	
 //	@Bean
 //	public UserDetailsService userDetailsService() {
-//		
+//	
+	//this is in memory UN pwd validation
+	
 //		UserDetails usr1 = User.withDefaultPasswordEncoder()//plain  txt password access -> but should encode this
 //				.username("un1")
 //				.password("simplepwd")//plain txt coz withDefaultPasswordEncoder
