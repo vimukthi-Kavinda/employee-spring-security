@@ -55,7 +55,7 @@ public class SecurityConfig {
 				.password("simplepwd")//plain txt coz withDefaultPasswordEncoder
 				.roles("admn")
 				.build();
-		
+		//since we are using these.. no prop file configs valid
 		return new InMemoryUserDetailsManager(List.of(usr1,usr2));
 	}
 	
