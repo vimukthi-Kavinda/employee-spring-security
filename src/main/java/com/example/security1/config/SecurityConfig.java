@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,7 +45,9 @@ public class SecurityConfig {
 		
 
 		return http.csrf(csrf->csrf.disable())//csrf disable (CSRF protection is only necessary if you're using session cookies..)   -> each line a filter in filter service?
-				.authorizeHttpRequests(req->req.anyRequest().authenticated())// auth all incoming request... No public endpoints unless you explicitly allow them.
+				.authorizeHttpRequests(req->req
+						.requestMatchers("/user/sign-in", "/user/log-in").permitAll() 
+						.anyRequest().authenticated())// auth all incoming request... No public endpoints unless you explicitly allow them.
 				.httpBasic(Customizer.withDefaults()) // for postman like requests basic auth.. In production, you typically replace this with token-based auth
 				.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//// Do not create or use HTTP sessions  — each request must be fully authenticated (stateless)
 				//Each request must include full authentication (e.g., via Authorization header).
@@ -83,6 +87,22 @@ public class SecurityConfig {
 //		return new InMemoryUserDetailsManager(List.of(usr1,usr2));
 //	}
 	
+	
+	//define auth manager
+	/*
+	 * 
+	 * When log in Needs to authenticate those credentials using Spring Security.If successful, returns a JWT token to the client.
+	 *This is where AuthenticationManager comes in.
+	 * 
+	 * */
+	
+	//here we are giving AuthenticationManager object to spring context
+	//this calls auth provider to auth with db
+	//access this on log in method - this beans' authenticate method
+	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+		return authenticationConfiguration.getAuthenticationManager();
+	}
 	
 	
 
