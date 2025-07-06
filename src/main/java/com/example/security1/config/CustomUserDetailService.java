@@ -1,5 +1,7 @@
 package com.example.security1.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -17,10 +19,13 @@ public class CustomUserDetailService implements UserDetailsService {//class need
 	@Autowired
 	private UserReposiroty userReposiroty;
 	
+	Logger logger = LoggerFactory.getLogger(CustomUserDetailService.class);
+	
 	//inside this method access db and  verify
 	@Override
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
+		logger.info("Validating {}",username);
 		//get user by un
 		User user = userReposiroty.findByUserName(username)
 				.orElseThrow(()->new UsernameNotFoundException(username+" not found"));

@@ -28,6 +28,11 @@ public class CustomUserDetails implements UserDetails {
 		// set pwd from user entity
 		return user.getPassword();
 	}
+	
+	public String getUserId() {
+		// set un from user entity
+		return user.getId().toString();
+	}
 
 	@Override
 	public String getUsername() {
