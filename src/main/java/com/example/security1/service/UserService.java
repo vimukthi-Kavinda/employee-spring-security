@@ -44,7 +44,7 @@ public class UserService {
 		// that CustomUserDetails is set to a.getPrincipal();
 		CustomUserDetails u = (CustomUserDetails)a.getPrincipal();
 		if(a.isAuthenticated()) { // if successfully authed by auth mnger-> auth provider db validation
-			return jwtService.generateToken(u.getUserId().toString()); //generate token
+			return jwtService.generateToken(u.getUsername()); //generate token - set subect as user name - can be id too .. but in jwt filter chain.. neet to handle user fetch from token
 		}
 		return "Failed";
 	}

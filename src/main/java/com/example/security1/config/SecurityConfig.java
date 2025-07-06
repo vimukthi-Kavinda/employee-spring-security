@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity        // dont use default use this
@@ -27,6 +28,10 @@ public class SecurityConfig {
 	
 	@Autowired
 	private UserDetailsService userDetailsService;//created a custom UserDetailsService to inject
+	
+	@Autowired
+	private JwtFilter jwtFilter; //create a filter class - create a class and extend with OncePerRequestFilter
+	
 	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -42,6 +47,10 @@ public class SecurityConfig {
 //				.build();
 		
 		
+		//when req come to srvr first default filter is UsernamePasswordAuthenticationFilter
+		// with jwt
+		//i want jwt to be first filter before UsernamePasswordAuthenticationFilter
+		
 		
 
 		return http.csrf(csrf->csrf.disable())//csrf disable (CSRF protection is only necessary if you're using session cookies..)   -> each line a filter in filter service?
@@ -52,6 +61,7 @@ public class SecurityConfig {
 				.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))//// Do not create or use HTTP sessions  — each request must be fully authenticated (stateless)
 				//Each request must include full authentication (e.g., via Authorization header).
 				//Spring Security does not generate a new session ID per request — it doesn't use sessions at all.
+				.addFilterBefore(jwtFilter,UsernamePasswordAuthenticationFilter.class) // addinig jwtfilter befoer UsernamePasswordAuthenticationFilter
 				.build();
 						 
 	}
